@@ -2,15 +2,49 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Bot } from "lucide-react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/firebase/client";
+import { signIn } from "@/lib/actions/auth.action";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const SignIn = () => {
+  const router = useRouter();
   const [signinData, setSigninData] = useState({
     email: "",
     password: "",
   });
 
-  const handleSignin = (e) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSignin = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    try {
+      const { email, password } = signinData;
+      const userCredentials = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const idToken = await userCredentials.user.getIdToken();
+      if (!idToken) {
+        toast.error("Failed to sign in");
+        return;
+      }
+      await signIn({
+        email,
+        idToken,
+      });
+      setIsLoading(false);
+
+      toast.success("Signed in successfully");
+      router.push("/");
+    } catch (error) {
+      toast.error("There was an error signing in");
+      console.log(error);
+      setIsLoading(false);
+    }
   };
   return (
     <div className="h-screen flex items-center justify-center p-4 sm:p-6 md:p-8">
@@ -59,13 +93,23 @@ const SignIn = () => {
                     }
                     required
                   />
-                  <p className="text-xs opacity-70 mt-1">
-                    Password must be at least 6 characters long
-                  </p>
                 </div>
               </div>
-              <button className="btn mt-4 btn-primary w-full" type="submit">
-                Sign In
+
+              <button
+                className="btn btn-primary w-full mt-5"
+                type="submit"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <span className="loading loading-spinner loading-xs">
+                      Signing In...
+                    </span>
+                  </>
+                ) : (
+                  "Sign In"
+                )}
               </button>
               <div className="text-center mt-4">
                 <p className="text-sm">

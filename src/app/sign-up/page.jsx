@@ -2,17 +2,51 @@
 import { useState } from "react";
 import { Bot } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/firebase/client";
+import { signUp } from "@/lib/actions/auth.action";
+import toast from "react-hot-toast";
+
 const SignUp = () => {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const [signupData, setSignupData] = useState({
-    fullName: "",
+    name: "",
     email: "",
     password: "",
     profilePicture: "",
     resume: "",
   });
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    try {
+      const { name, email, password } = signupData;
+      const userCredentials = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const result = await signUp({
+        uid: userCredentials.user.uid,
+        name: name,
+        email: email,
+        password: password,
+      });
+      if (!result?.success) {
+        toast.error(result?.message);
+        setIsLoading(false);
+        return;
+      }
+      toast.success("Account created successfully.Please sign in to continue.");
+      router.push("/sign-in");
+    } catch (error) {
+      toast.error("There was an error creating your account.");
+      console.log(error);
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -32,7 +66,7 @@ const SignUp = () => {
           <div className="w-full mt-4">
             <form onSubmit={handleSignup}>
               <div className="space-y-3">
-                {/* FULLNAME */}
+                {/* NAME */}
                 <div className="form-control w-full">
                   <label className="label">
                     <span className="label-text">Full Name</span>
@@ -41,9 +75,9 @@ const SignUp = () => {
                     type="text"
                     placeholder="Nouman Khan"
                     className="input input-bordered w-full"
-                    value={signupData.fullName}
+                    value={signupData.name}
                     onChange={(e) =>
-                      setSignupData({ ...signupData, fullName: e.target.value })
+                      setSignupData({ ...signupData, name: e.target.value })
                     }
                     required
                   />
@@ -80,12 +114,9 @@ const SignUp = () => {
                     }
                     required
                   />
-                  <p className="text-xs opacity-70 mt-1">
-                    Password must be at least 6 characters long
-                  </p>
                 </div>
                 {/* Profile Picture */}
-                <div className="form-control w-full">
+                {/* <div className="form-control w-full">
                   <label className="label">
                     <span className="label-text">Profile picture</span>
                   </label>
@@ -100,9 +131,9 @@ const SignUp = () => {
                       })
                     }
                   />
-                </div>
+                </div> */}
                 {/* Resume */}
-                <div className="form-control w-full">
+                {/* <div className="form-control w-full">
                   <label className="label">
                     <span className="label-text">Resume</span>
                   </label>
@@ -114,7 +145,7 @@ const SignUp = () => {
                       setSignupData({ ...signupData, resume: e.target.value })
                     }
                   />
-                </div>
+                </div> */}
                 {/* Terms and Privacy Policy */}
                 <div className="form-control">
                   <label className="label cursor-pointer justify-start gap-2">
@@ -136,9 +167,22 @@ const SignUp = () => {
                   </label>
                 </div>
               </div>
-              <button className="btn btn-primary w-full" type="submit">
-                Create Account
+              <button
+                className="btn btn-primary w-full"
+                type="submit"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <span className="loading loading-spinner loading-xs">
+                      Creating Account...
+                    </span>
+                  </>
+                ) : (
+                  "Create Account"
+                )}
               </button>
+
               <div className="text-center mt-4">
                 <p className="text-sm">
                   Already have an account?{" "}

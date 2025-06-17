@@ -22,8 +22,9 @@ export default function RootLayout({ children }) {
     <html data-theme="synthwave" lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        suppressHydrationWarning
       >
-        {children}
+        {children || null}
         <Toaster />
       </body>
     </html>
