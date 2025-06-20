@@ -95,3 +95,9 @@ export async function getCurrentUser() {
     return null;
   }
 }
+
+export async function isAuthenticated() {
+  const user = await getCurrentUser();
+  return !!user; // user ? -> first ! -> false -> second ! -> return true
+  // no user ? -> first ! -> true -> second ! -> return false
+}
