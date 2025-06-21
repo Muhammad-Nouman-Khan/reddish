@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/firebase/client";
 import { signUp } from "@/lib/actions/auth.action";
+import { getAuthErrorMessage } from "@/lib/utils";
 import toast from "react-hot-toast";
 
 const SignUp = () => {
@@ -40,10 +41,13 @@ const SignUp = () => {
         setIsLoading(false);
         return;
       }
-      toast.success("Account created successfully.Please sign in to continue.");
+      toast.success(
+        "Account created successfully. Please sign in to continue."
+      );
       router.push("/sign-in");
     } catch (error) {
-      toast.error("There was an error creating your account.");
+      const errorMessage = getAuthErrorMessage(error);
+      toast.error(errorMessage);
       console.log(error);
       setIsLoading(false);
     }

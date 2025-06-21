@@ -28,12 +28,13 @@ export async function signUp(params) {
     if (error.code === "auth/email-already-exists") {
       return {
         success: false,
-        message: "Email already exists",
+        message:
+          "An account with this email already exists. Please sign in instead.",
       };
     }
     return {
       success: false,
-      message: "Failed to create a user",
+      message: "Failed to create account. Please try again.",
     };
   }
 }
@@ -49,11 +50,15 @@ export async function signIn(params) {
       };
     }
     await setSessionCookie(idToken);
+    return {
+      success: true,
+      message: "Signed in successfully",
+    };
   } catch (error) {
     console.error("Error signing in", error);
     return {
       success: false,
-      message: "Failed to sign in",
+      message: "Failed to sign in. Please try again.",
     };
   }
 }
@@ -100,4 +105,13 @@ export async function isAuthenticated() {
   const user = await getCurrentUser();
   return !!user; // user ? -> first ! -> false -> second ! -> return true
   // no user ? -> first ! -> true -> second ! -> return false
+}
+
+export async function signOut() {
+  const cookieStore = await cookies();
+  cookieStore.delete("session");
+  return {
+    success: true,
+    message: "Signed out successfully",
+  };
 }

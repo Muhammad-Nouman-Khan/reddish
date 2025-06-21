@@ -5,6 +5,7 @@ import { Bot } from "lucide-react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/firebase/client";
 import { signIn } from "@/lib/actions/auth.action";
+import { getAuthErrorMessage } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
@@ -30,18 +31,26 @@ const SignIn = () => {
       const idToken = await userCredentials.user.getIdToken();
       if (!idToken) {
         toast.error("Failed to sign in");
+        setIsLoading(false);
         return;
       }
-      await signIn({
+      const result = await signIn({
         email,
         idToken,
       });
-      setIsLoading(false);
 
+      if (!result?.success) {
+        toast.error(result?.message);
+        setIsLoading(false);
+        return;
+      }
+
+      setIsLoading(false);
       toast.success("Signed in successfully");
       router.push("/");
     } catch (error) {
-      toast.error("There was an error signing in");
+      const errorMessage = getAuthErrorMessage(error);
+      toast.error(errorMessage);
       console.log(error);
       setIsLoading(false);
     }
