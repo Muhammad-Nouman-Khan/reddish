@@ -1,5 +1,6 @@
 import { defineField, defineType } from "sanity";
 import { UserIcon } from "lucide-react";
+import Image from "next/image";
 
 export const userType = defineType({
   name: "user",
@@ -48,6 +49,16 @@ export const userType = defineType({
     select: {
       title: "username",
       media: "imageUrl",
+    },
+    prepare({ title, media }) {
+      return {
+        title,
+        media: media ? (
+          <Image src={media} alt={`${title}'s avatar`} width={40} height={40} />
+        ) : (
+          <UserIcon />
+        ),
+      };
     },
   },
 });
