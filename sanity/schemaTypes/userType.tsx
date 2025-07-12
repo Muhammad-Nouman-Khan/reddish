@@ -14,7 +14,7 @@ export const userType = defineType({
       title: "Username",
       type: "string",
       description: "The unique username for this user",
-      validation: (rule) => rule.required(),
+      validation: (rule) => rule.required(), // Ensure username is provided
     }),
     defineField({
       name: "email",
