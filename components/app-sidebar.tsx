@@ -1,12 +1,5 @@
 import * as React from "react";
-import {
-  FlameIcon,
-  GalleryVerticalEnd,
-  HomeIcon,
-  Minus,
-  Plus,
-  TrendingUpIcon,
-} from "lucide-react";
+import { FlameIcon, HomeIcon, Minus, Plus, TrendingUpIcon } from "lucide-react";
 
 import { SearchForm } from "@/components/search-form";
 import {

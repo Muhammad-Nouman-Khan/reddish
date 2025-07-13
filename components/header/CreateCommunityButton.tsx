@@ -9,12 +9,13 @@ import {
   DialogDescription,
 } from "../ui/dialog";
 import { ImageIcon, Plus } from "lucide-react";
-import { startTransition, useRef, useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { createCommunity } from "@/action/createCommunity";
+import { useRouter } from "next/navigation";
 const CreateCommunityButton = () => {
   const user = useUser();
   const [open, setOpen] = useState(false);
@@ -25,7 +26,8 @@ const CreateCommunityButton = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [isPending, setTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setName(value);
@@ -110,11 +112,14 @@ const CreateCommunityButton = () => {
           description.trim() || undefined
         );
 
+        console.log("Community created:", result);
+
         if ("error" in result && result.error) {
           setErrorMessage(result.error);
         } else if ("subreddit" in result && result.subreddit) {
           setOpen(false);
           resetForm();
+          router.push(`/community/${result.subreddit.slug?.current}`);
         }
       } catch (error) {
         console.error("Error creating community:", error);
