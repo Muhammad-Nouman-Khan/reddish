@@ -14,6 +14,7 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import Image from "next/image";
 import { Button } from "../ui/button";
+import { createCommunity } from "@/action/createCommunity";
 const CreateCommunityButton = () => {
   const user = useUser();
   const [open, setOpen] = useState(false);
@@ -62,6 +63,17 @@ const CreateCommunityButton = () => {
       reader.readAsDataURL(file);
     }
   };
+  const resetForm = () => {
+    setName("");
+    setSlug("");
+    setDescription("");
+    setErrorMessage("");
+    setImagePreview(null);
+    setImageFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
   const handleCreateCommunity = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!name.trim()) {
@@ -75,6 +87,35 @@ const CreateCommunityButton = () => {
     setErrorMessage("");
     startTransition(async () => {
       try {
+        let imageBase64: string | null = null;
+        let fileName: string | null = null;
+        let fileType: string | null = null;
+
+        if (imageFile) {
+          const reader = new FileReader();
+          imageBase64 = await new Promise<string>((resolve) => {
+            reader.onload = () => resolve(reader.result as string);
+            reader.readAsDataURL(imageFile);
+          });
+          fileName = imageFile.name;
+          fileType = imageFile.type;
+        }
+
+        const result = await createCommunity(
+          name.trim(),
+          imageBase64,
+          fileName,
+          fileType,
+          slug.trim(),
+          description.trim() || undefined
+        );
+
+        if ("error" in result && result.error) {
+          setErrorMessage(result.error);
+        } else if ("subreddit" in result && result.subreddit) {
+          setOpen(false);
+          resetForm();
+        }
       } catch (error) {
         console.error("Error creating community:", error);
         setErrorMessage("Failed to create community. Please try again.");
