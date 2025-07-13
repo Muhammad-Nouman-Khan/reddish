@@ -375,6 +375,11 @@ export type GetAllPostsQueryResult = Array<{
   isDeleted: boolean | null;
 }>;
 
+// Source: ./sanity/lib/post/getUserPostVoteStatus.ts
+// Variable: getUserPostVoteStatusQuery
+// Query: *[_type == "vote" && post._ref == $postId && user._ref == $userId][0].voteType
+export type GetUserPostVoteStatusQueryResult = "downvote" | "upvote" | null;
+
 // Source: ./sanity/lib/subreddit/createSubreddit.ts
 // Variable: checkExistingQuery
 // Query: *[_type == "subreddit" && title == $name][0]{          _id      }
@@ -443,14 +448,25 @@ export type GetExistingUserResult = {
   isReported?: boolean;
 } | null;
 
+// Source: ./sanity/lib/vote/getPostVotes.ts
+// Variable: getPostVotesQuery
+// Query: {            "upvotes": count(*[_type == "vote" && post._ref == $postId && voteType == "upvote"]),            "downvotes": count(*[_type == "vote" && post._ref == $postId && voteType == "downvote"]),            "netScore": count(*[_type == "vote" && post._ref == $postId && voteType == "upvote"]) - count(*[_type == "vote" && post._ref == $postId && voteType == "downvote"])        }
+export type GetPostVotesQueryResult = {
+  upvotes: number;
+  downvotes: number;
+  netScore: number;
+};
+
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
     "*[_type == \"post\" && isDeleted == false]{\n        _id,\n        title,\n        \"slug\": slug.current,\n        body,\n        publishedAt,\n        \"author\": author->,\n        \"subreddit\": subreddit->,\n        image,\n        isDeleted\n    } | order(publishedAt desc)": GetAllPostsQueryResult;
+    "*[_type == \"vote\" && post._ref == $postId && user._ref == $userId][0].voteType": GetUserPostVoteStatusQueryResult;
     "*[_type == \"subreddit\" && title == $name][0]{  \n        _id\n      }": CheckExistingQueryResult;
     "*[_type == \"subreddit\" && slug.current == $slug][0]{\n            _id\n        }": CheckSlugQueryResult;
     "*[_type == \"subreddit\"] {\n        ...,\n        \"slug\": slug.current,\n        \"moderator\": moderator->,\n      } | order(createdAt desc)": GetSubredditsQueryResult;
     "*[_type == \"user\" && _id == $id][0]": GetExistingUserResult;
+    "\n        {\n            \"upvotes\": count(*[_type == \"vote\" && post._ref == $postId && voteType == \"upvote\"]),\n            \"downvotes\": count(*[_type == \"vote\" && post._ref == $postId && voteType == \"downvote\"]),\n            \"netScore\": count(*[_type == \"vote\" && post._ref == $postId && voteType == \"upvote\"]) - count(*[_type == \"vote\" && post._ref == $postId && voteType == \"downvote\"])\n        }\n    ": GetPostVotesQueryResult;
   }
 }
