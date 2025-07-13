@@ -289,23 +289,7 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
-export type AllSanitySchemaTypes =
-  | Vote
-  | Comment
-  | Post
-  | Subreddit
-  | User
-  | SanityImagePaletteSwatch
-  | SanityImagePalette
-  | SanityImageDimensions
-  | SanityImageHotspot
-  | SanityImageCrop
-  | SanityFileAsset
-  | SanityImageAsset
-  | SanityImageMetadata
-  | Geopoint
-  | Slug
-  | SanityAssetSourceData;
+export type AllSanitySchemaTypes = Vote | Comment | Post | Subreddit | User | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./sanity/lib/subreddit/getSubreddit.ts
 // Variable: getSubredditsQuery
@@ -347,10 +331,27 @@ export type GetSubredditsQueryResult = Array<{
   createdAt?: string;
 }>;
 
+// Source: ./sanity/lib/user/getUser.ts
+// Variable: getExistingUser
+// Query: *[_type == "user" && _id == $id][0]
+export type GetExistingUserResult = {
+  _id: string;
+  _type: "user";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  username?: string;
+  email?: string;
+  imageUrl?: string;
+  joinedAt?: string;
+  isReported?: boolean;
+} | null;
+
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '*[_type == "subreddit"] {\n        ...,\n        "slug": slug.current,\n        "moderator": moderator->,\n      } | order(createdAt desc)': GetSubredditsQueryResult;
+    "*[_type == \"subreddit\"] {\n        ...,\n        \"slug\": slug.current,\n        \"moderator\": moderator->,\n      } | order(createdAt desc)": GetSubredditsQueryResult;
+    "*[_type == \"user\" && _id == $id][0]": GetExistingUserResult;
   }
 }
