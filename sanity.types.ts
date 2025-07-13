@@ -291,6 +291,102 @@ export type SanityAssetSourceData = {
 
 export type AllSanitySchemaTypes = Vote | Comment | Post | Subreddit | User | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
+// Source: ./sanity/lib/post/getPosts.ts
+// Variable: getAllPostsQuery
+// Query: *[_type == "post" && isDeleted == false]{        _id,        title,        "slug": slug.current,        body,        publishedAt,        "author": author->,        "subreddit": subreddit->,        image,        isDeleted    } | order(publishedAt desc)
+export type GetAllPostsQueryResult = Array<{
+  _id: string;
+  title: string | null;
+  slug: null;
+  body: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }> | null;
+  publishedAt: string | null;
+  author: {
+    _id: string;
+    _type: "user";
+    _createdAt: string;
+    _updatedAt: string;
+    _rev: string;
+    username?: string;
+    email?: string;
+    imageUrl?: string;
+    joinedAt?: string;
+    isReported?: boolean;
+  } | null;
+  subreddit: {
+    _id: string;
+    _type: "subreddit";
+    _createdAt: string;
+    _updatedAt: string;
+    _rev: string;
+    title?: string;
+    description?: string;
+    slug?: Slug;
+    image?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    };
+    moderator?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "user";
+    };
+    createdAt?: string;
+  } | null;
+  image: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  } | null;
+  isDeleted: boolean | null;
+}>;
+
+// Source: ./sanity/lib/subreddit/createSubreddit.ts
+// Variable: checkExistingQuery
+// Query: *[_type == "subreddit" && title == $name][0]{          _id      }
+export type CheckExistingQueryResult = {
+  _id: string;
+} | null;
+// Variable: checkSlugQuery
+// Query: *[_type == "subreddit" && slug.current == $slug][0]{            _id        }
+export type CheckSlugQueryResult = {
+  _id: string;
+} | null;
+
 // Source: ./sanity/lib/subreddit/getSubreddit.ts
 // Variable: getSubredditsQuery
 // Query: *[_type == "subreddit"] {        ...,        "slug": slug.current,        "moderator": moderator->,      } | order(createdAt desc)
@@ -351,6 +447,9 @@ export type GetExistingUserResult = {
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
+    "*[_type == \"post\" && isDeleted == false]{\n        _id,\n        title,\n        \"slug\": slug.current,\n        body,\n        publishedAt,\n        \"author\": author->,\n        \"subreddit\": subreddit->,\n        image,\n        isDeleted\n    } | order(publishedAt desc)": GetAllPostsQueryResult;
+    "*[_type == \"subreddit\" && title == $name][0]{  \n        _id\n      }": CheckExistingQueryResult;
+    "*[_type == \"subreddit\" && slug.current == $slug][0]{\n            _id\n        }": CheckSlugQueryResult;
     "*[_type == \"subreddit\"] {\n        ...,\n        \"slug\": slug.current,\n        \"moderator\": moderator->,\n      } | order(createdAt desc)": GetSubredditsQueryResult;
     "*[_type == \"user\" && _id == $id][0]": GetExistingUserResult;
   }
