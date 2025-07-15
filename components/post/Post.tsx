@@ -5,6 +5,7 @@ import { getPostVotes } from "@/sanity/lib/vote/getPostVotes";
 import TimeAgo from "../TimeAgo";
 import { urlFor } from "@/sanity/lib/image";
 import Image from "next/image";
+import { MessageSquare } from "lucide-react";
 
 interface PostProps {
   post: GetAllPostsQueryResult[number];
@@ -75,6 +76,12 @@ const Post = async ({ post, userId }: PostProps) => {
               />
             </div>
           )}
+          <button className="flex items-center px-1 py-2 gap-1 text-sm text-gray-500">
+            <MessageSquare className="w-4 h-4" />
+            <span>{comments.length} Comments</span>
+          </button>
+
+          {/* Comment Form */}
         </div>
       </div>
 
