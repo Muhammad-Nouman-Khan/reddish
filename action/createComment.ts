@@ -21,6 +21,8 @@ export async function createComment(
       content,
       parentCommentId,
     });
+
+    return { comment };
   } catch (error) {
     console.error("Error adding comment:", error);
     return { error: "Failed to add comment" };
