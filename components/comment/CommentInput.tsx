@@ -20,6 +20,19 @@ const CommentInput = ({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    startTransition(async () => {
+      try {
+        const result = await createComment(postId, content, parentCommentId);
+        if (result.error) {
+          console.error("Error adding comment: ", result.error);
+        } else {
+          setContent("");
+        }
+      } catch (error) {
+        console.error("Error posting comment:", error);
+      }
+    });
   };
 
   return (
