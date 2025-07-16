@@ -6,6 +6,7 @@ import TimeAgo from "../TimeAgo";
 import { urlFor } from "@/sanity/lib/image";
 import Image from "next/image";
 import { MessageSquare } from "lucide-react";
+import CommentInput from "../comment/CommentInput";
 
 interface PostProps {
   post: GetAllPostsQueryResult[number];
@@ -81,7 +82,7 @@ const Post = async ({ post, userId }: PostProps) => {
             <span>{comments.length} Comments</span>
           </button>
 
-          {/* Comment Form */}
+          <CommentInput postId={post._id} />
         </div>
       </div>
 
