@@ -15,7 +15,7 @@ const CommentInput = ({
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const { user } = useUser();
-  return <div>CommentInput</div>;
+  return <form>CommentInput</form>;
 };
 
 export default CommentInput;
