@@ -7,6 +7,7 @@ import { urlFor } from "@/sanity/lib/image";
 import Image from "next/image";
 import { MessageSquare } from "lucide-react";
 import CommentInput from "../comment/CommentInput";
+import CommentList from "../comment/CommentList";
 
 interface PostProps {
   post: GetAllPostsQueryResult[number];
@@ -83,6 +84,7 @@ const Post = async ({ post, userId }: PostProps) => {
           </button>
 
           <CommentInput postId={post._id} />
+          <CommentList postId={post._id} comments={comments} userId={userId} />
         </div>
       </div>
 
