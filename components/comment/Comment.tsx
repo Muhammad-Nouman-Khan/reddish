@@ -1,7 +1,8 @@
 import { GetPostCommentsQueryResult } from "@/sanity.types";
+import { getCommentReplies } from "@/sanity/lib/comment/getCommentReplies";
 import React from "react";
 
-const Comment = ({
+const Comment = async ({
   postId,
   comment,
   userId,
@@ -10,7 +11,13 @@ const Comment = ({
   comment: GetPostCommentsQueryResult[number];
   userId: string | null;
 }) => {
-  return <div>Comment</div>;
+  const replies = await getCommentReplies(comment._id, userId);
+  const userVoteStatus = comment.votes.voteStatus;
+  return (
+    <article>
+      <div></div>
+    </article>
+  );
 };
 
 export default Comment;
