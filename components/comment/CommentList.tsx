@@ -1,4 +1,7 @@
-import { GetPostCommentsQueryResult } from "@/sanity.types";
+import {
+  GetCommentRepliesQueryResult,
+  GetPostCommentsQueryResult,
+} from "@/sanity.types";
 import React from "react";
 import Comment from "./Comment";
 
@@ -8,7 +11,7 @@ const CommentList = async ({
   userId,
 }: {
   postId: string;
-  comments: GetPostCommentsQueryResult;
+  comments: GetPostCommentsQueryResult | GetCommentRepliesQueryResult;
   userId: string | null;
 }) => {
   const isRootComment = !comments.some((comment) => comment.parentComment); // check if the comment is a root comment
