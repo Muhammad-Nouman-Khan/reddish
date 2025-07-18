@@ -47,3 +47,78 @@ A modern, AI-powered Reddit clone built with Next.js 15, Sanity CMS, Clerk, and 
 - ⏱️ Time-ago timestamps for posts and comments
 - 🔍 Intuitive search functionality
 - 💫 Micro-interactions for better engagement
+
+### Prerequisites
+
+- Node.js 18+
+- npm, yarn, or pnpm
+- Clerk Account
+- Sanity Account
+- OpenAI API key (for AI moderation)
+
+### Environment Variables
+
+Create a `.env.local` file with:
+
+```bash
+# Sanity
+NEXT_PUBLIC_SANITY_PROJECT_ID=your-project-id
+NEXT_PUBLIC_SANITY_DATASET=production
+SANITY_API_TOKEN=your-sanity-read-token
+
+# Clerk
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your-clerk-publishable-key
+CLERK_SECRET_KEY=your-clerk-secret-key
+
+# OpenAI (for AI moderation)
+OPENAI_API_KEY=your-openai-api-key
+```
+
+### Installation
+
+```bash
+# Clone the repository
+
+# Install dependencies using pnpm
+pnpm install
+
+# Start the development server with Turbopack
+pnpm dev
+
+```
+
+### Setting up Sanity CMS
+
+1. Create a Sanity account
+2. Create a new project
+3. Install the Sanity CLI:
+   ```bash
+   npm install -g @sanity/cli
+   ```
+4. Initialize Sanity in your project:
+   ```bash
+   sanity init
+   ```
+5. Deploy Sanity Studio:
+   ```bash
+   sanity deploy
+   ```
+
+### Setting up Clerk
+
+1. Create a Clerk application
+2. Configure authentication providers
+3. Set up redirect URLs
+4. Add environment variables
+
+### Core Technologies
+
+- Next.js 15
+- TypeScript
+- Sanity CMS
+- Clerk Auth
+- OpenAI API
+- Tailwind CSS
+- Radix UI
+- Lucide Icons
+
