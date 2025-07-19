@@ -8,6 +8,7 @@ import Image from "next/image";
 import { MessageSquare } from "lucide-react";
 import CommentInput from "../comment/CommentInput";
 import CommentList from "../comment/CommentList";
+import PostVoteButtons from "./PostVoteButtons";
 
 interface PostProps {
   post: GetAllPostsQueryResult[number];
@@ -25,7 +26,12 @@ const Post = async ({ post, userId }: PostProps) => {
     >
       <div className="flex">
         {/* Vote Buttons */}
-
+        <PostVoteButtons
+          contentId={post._id}
+          votes={votes}
+          vote={vote}
+          contentType="post"
+        />
         {/* Post Content */}
         <div className="flex-1 p-3">
           <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
