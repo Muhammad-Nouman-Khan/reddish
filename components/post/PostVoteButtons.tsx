@@ -44,9 +44,56 @@ const PostVoteButtons = ({
       scoreChange = 1;
       setOptimisticVote("upvote");
     }
+
+    setOptimisticScore((prev) => prev + scoreChange);
+
+    startTransition(async () => {
+      try {
+        await upvote({
+          contentId,
+          contentType,
+        });
+      } catch (error) {
+        setOptimisticVote(vote);
+        setOptimisticScore(votes.netScore);
+        console.error(`Failed to upvote ${contentType}:`, error);
+      }
+    });
   };
 
-  const handleDownVote = () => {};
+  const handleDownVote = () => {
+    if (!isSignedIn || isPending) return;
+    let scoreChange = 0;
+
+    if (optimisticVote === "downvote") {
+      // Remove downvote ( User is undoing their vote )
+      scoreChange = 1;
+      setOptimisticVote(null);
+    } else if (optimisticVote === "upvote") {
+      // Remove upvote and add downvote ( User is switching their vote )
+      scoreChange = -2;
+      setOptimisticVote("downvote");
+    } else {
+      // Add downvote ( User is voting for the first time )
+      scoreChange = -1;
+      setOptimisticVote("downvote");
+    }
+
+    setOptimisticScore((prev) => prev + scoreChange);
+
+    startTransition(async () => {
+      try {
+        await downvote({
+          contentId,
+          contentType,
+        });
+      } catch (error) {
+        setOptimisticVote(vote);
+        setOptimisticScore(votes.netScore);
+        console.error(`Failed to downvote ${contentType}:`, error);
+      }
+    });
+  };
 
   return (
     <div className="flex flex-col items-center bg-gray-50 p-2 rounded-l-md">
