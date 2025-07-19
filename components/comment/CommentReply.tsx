@@ -29,6 +29,15 @@ const CommentReply = ({
           <MessageCircle className="w-3.5 h-3.5" />
           {isReplying ? "Cancel" : isSignedIn ? "Reply" : "Sign in to reply"}
         </button>
+
+        {/* <ReportButton contentId={comment._id} />
+        {comment.author?._id && (
+          <DeleteButton
+            contentOwnerId={comment.author?._id}
+            contentId={comment._id}
+            contentType="comment"
+          />
+        )} */}
       </div>
       {isReplying && (
         <div className="mt-3 ps-2 border-s-2 border-gray-100">
