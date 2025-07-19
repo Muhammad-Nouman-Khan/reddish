@@ -26,7 +26,25 @@ const PostVoteButtons = ({
   );
   const [isPending, startTransition] = useTransition();
 
-  const handleUpVote = () => {};
+  // Calculate score change based on current vote status
+  const handleUpVote = () => {
+    if (!isSignedIn || isPending) return;
+
+    let scoreChange = 0;
+    if (optimisticVote === "upvote") {
+      // Remove upvote ( User is undoing their vote )
+      scoreChange = -1;
+      setOptimisticVote(null);
+    } else if (optimisticVote === "downvote") {
+      // Remove downvote and add upvote ( User is switching their vote )
+      scoreChange = 2;
+      setOptimisticVote("upvote");
+    } else {
+      // Add upvote ( User is voting for the first time )
+      scoreChange = 1;
+      setOptimisticVote("upvote");
+    }
+  };
 
   const handleDownVote = () => {};
 
