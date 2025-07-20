@@ -1,4 +1,6 @@
 "use client";
+import { downvote } from "@/action/downvote";
+import { upvote } from "@/action/upvote";
 import {
   GetPostVotesQueryResult,
   GetUserPostVoteStatusQueryResult,
@@ -49,10 +51,7 @@ const PostVoteButtons = ({
 
     startTransition(async () => {
       try {
-        await upvote({
-          contentId,
-          contentType,
-        });
+        await upvote(contentId, contentType);
       } catch (error) {
         setOptimisticVote(vote);
         setOptimisticScore(votes.netScore);
@@ -83,10 +82,7 @@ const PostVoteButtons = ({
 
     startTransition(async () => {
       try {
-        await downvote({
-          contentId,
-          contentType,
-        });
+        await downvote(contentId, contentType);
       } catch (error) {
         setOptimisticVote(vote);
         setOptimisticScore(votes.netScore);
