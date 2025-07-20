@@ -1,6 +1,7 @@
 "use server";
 
 import { getUser } from "@/sanity/lib/user/getUser";
+import { downvotePost } from "@/sanity/lib/vote/downvotePost";
 
 export async function downvote(
   contentId: string,
