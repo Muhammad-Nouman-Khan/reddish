@@ -1,6 +1,7 @@
 "use server";
 
 import { getUser } from "@/sanity/lib/user/getUser";
+import { upvoteComment } from "@/sanity/lib/vote/upvoteComment";
 import { upvotePost } from "@/sanity/lib/vote/upvotePost";
 
 export async function upvote(
