@@ -1,4 +1,5 @@
 import CreateCommunityButton from "@/components/header/CreateCommunityButton";
+import { SubredditCombobox } from "@/components/subreddit/SubredditCombobox";
 import { getSubreddits } from "@/sanity/lib/subreddit/getSubreddits";
 
 const CreatePostPage = async ({
@@ -54,10 +55,10 @@ const CreatePostPage = async ({
               <label className="block text-sm font-medium mb-2">
                 Select a community to post in
               </label>
-              {/* <SubredditCombobox
+              <SubredditCombobox
                 subreddits={subreddits}
                 defaultValue={subreddit}
-              /> */}
+              />
               <hr className="my-4" />
               <p className="mt-4 text-sm text-gray-600">
                 If you don't see your community, you can create here.
