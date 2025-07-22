@@ -1,6 +1,7 @@
 import { defineQuery } from "groq";
 import { sanityFetch } from "../live";
 export async function getSubredditBySlug(slug: string) {
+  const lowerCaseSlug = slug.toLowerCase();
   const getSubredditBySlugQuery = await defineQuery(
     `*[_type == "subreddit" && slug.current == $slug][0] {
         ...,
@@ -10,7 +11,7 @@ export async function getSubredditBySlug(slug: string) {
   );
   const subreddit = await sanityFetch({
     query: getSubredditBySlugQuery,
-    params: { slug },
+    params: { slug: lowerCaseSlug },
   });
   return subreddit.data;
 }
