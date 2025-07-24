@@ -1,5 +1,6 @@
 "use client";
 
+import { reportContent } from "@/action/reportContent";
 import { useUser } from "@clerk/nextjs";
 import { Flag } from "lucide-react";
 import { useState } from "react";
