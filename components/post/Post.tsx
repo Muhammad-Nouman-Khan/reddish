@@ -12,6 +12,7 @@ import { MessageSquare } from "lucide-react";
 import CommentInput from "../comment/CommentInput";
 import CommentList from "../comment/CommentList";
 import PostVoteButtons from "./PostVoteButtons";
+import ReportButton from "../ReportButton";
 
 interface PostProps {
   post:
@@ -100,6 +101,12 @@ const Post = async ({ post, userId }: PostProps) => {
       </div>
 
       {/* Buttons */}
+      <div className="absolute top-2 right-2">
+        <div className="flex items-center gap-2">
+          <ReportButton contentId={post._id} />
+        </div>
+        {/* Delete Button */}
+      </div>
     </article>
   );
 };
