@@ -13,7 +13,25 @@ const ReportButton = ({ contentId }: ReportButtonProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const { isSignedIn } = useUser();
 
-  const handleReport = async () => {};
+  const handleReport = async () => {
+    if (isReported || isLoading || !isSignedIn) return;
+
+    setIsLoading(true);
+    setIsReported(true);
+
+    try {
+      const response = await reportContent(contentId);
+      if (response.error) {
+        setIsReported(false);
+        console.error(response.error);
+      }
+    } catch (error) {
+      setIsReported(false);
+      console.error("Failed to report content", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <button
       onClick={handleReport}
