@@ -12,6 +12,7 @@
   "dependencies": {
     "@ai-sdk/openai": "^1.3.23",
     "@ai-sdk/react": "^1.2.12",
+    "@clerk/agent-toolkit": "^0.1.14",
     "@clerk/nextjs": "^6.23.3",
     "@radix-ui/react-avatar": "^1.1.10",
     "@radix-ui/react-collapsible": "^1.1.11",
