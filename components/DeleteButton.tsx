@@ -11,19 +11,21 @@ interface DeleteButtonProps {
   contentType: string;
   contentOwnerId: string;
 }
-const DeleteButton = ({
+
+function DeleteButton({
   contentId,
   contentType,
   contentOwnerId,
-}: DeleteButtonProps) => {
+}: DeleteButtonProps) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { isSignedIn, user } = useUser();
 
   const handleDelete = async () => {
     if (isDeleting || !isSignedIn) return;
-
-    if (!window.confirm("Are you sure you want to delete this?")) return;
+    if (!window.confirm("Are you sure you want to delete this?")) {
+      return;
+    }
 
     setIsDeleting(true);
     setError(null);
@@ -38,7 +40,7 @@ const DeleteButton = ({
         setError(response.error);
       }
     } catch (error) {
-      setError("An error occurred while deleting the content.");
+      setError("Failed to delete. Please try again.");
       console.error(`Failed to delete ${contentType}:`, error);
     } finally {
       setIsDeleting(false);
@@ -67,6 +69,6 @@ const DeleteButton = ({
       {error && <span className="text-red-500 ml-2">{error}</span>}
     </button>
   );
-};
+}
 
 export default DeleteButton;
