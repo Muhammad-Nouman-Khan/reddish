@@ -1,5 +1,7 @@
 "use client";
 
+import { deleteComment } from "@/action/deleteComment";
+import { deletePost } from "@/action/deletePost";
 import { useUser } from "@clerk/nextjs";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";

@@ -8,6 +8,7 @@ import { useState } from "react";
 import CommentInput from "./CommentInput";
 import { MessageCircle } from "lucide-react";
 import ReportButton from "../ReportButton";
+import DeleteButton from "../DeleteButton";
 
 const CommentReply = ({
   postId,
@@ -32,13 +33,13 @@ const CommentReply = ({
         </button>
 
         <ReportButton contentId={comment._id} />
-        {/* {comment.author?._id && (
+        {comment.author?._id && (
           <DeleteButton
             contentOwnerId={comment.author?._id}
             contentId={comment._id}
             contentType="comment"
           />
-        )}  */}
+        )}
       </div>
       {isReplying && (
         <div className="mt-3 ps-2 border-s-2 border-gray-100">
